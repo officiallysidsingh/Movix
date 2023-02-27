@@ -6,6 +6,9 @@ import './style.scss';
 
 import {useFetch} from '../../../hooks/useFetch';
 
+import Img from '../../../components/lazyLoadImage/Img';
+import ContentWrapper from '../../../components/contentWrapper/ContentWrapper';
+
 const HeroBanner = () => {
   
   const [background, setBackground] = useState('');
@@ -27,11 +30,13 @@ const HeroBanner = () => {
 
   return (
     <div className='heroBanner'>
-      <div className="backdrop-img">
-        
-      </div>
+      {!loading ? <div className="backdrop-img">
+        <Img src={background} />
+      </div> : null}
 
-      <div className="wrapper">
+      <div className="opacity-layer"></div>
+      
+      <ContentWrapper>
         <div className="heroBannerContent">
           <span className="title">Welcome</span>
           <span className="subTitle">
@@ -48,7 +53,7 @@ const HeroBanner = () => {
             <button>Search</button>
           </div>
         </div>
-      </div>
+      </ContentWrapper>
     </div>
   )
 }
