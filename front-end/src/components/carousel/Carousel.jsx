@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import {
-    BsFillArrowLeftCircleFill,
-    BsFillArrowRightCircleFill,
+  BsFillArrowLeftCircleFill,
+  BsFillArrowRightCircleFill,
 } from "react-icons/bs";
 
 import { useNavigate } from "react-router-dom";
@@ -17,24 +17,26 @@ import Genres from "../genres/Genres";
 import "./style.scss";
 
 const Carousel = ({ data, loading, endpoint }) => {
-
   const carouselContainer = useRef();
-  const {url} = useSelector((state) => state.home);
+  const { url } = useSelector((state) => state.home);
   const navigate = useNavigate();
 
   const navigation = (dir) => {
     const container = carouselContainer.current;
 
-    const scrollAmount = dir === "left" ? container.scrollLeft - (container.offsetWidth + 20) : container.scrollLeft + (container.offsetWidth + 20)
+    const scrollAmount =
+      dir === "left"
+        ? container.scrollLeft - (container.offsetWidth + 20)
+        : container.scrollLeft + (container.offsetWidth + 20);
 
     container.scrollTo({
       left: scrollAmount,
       behavior: "smooth",
-    })
-  }
+    });
+  };
 
   const skItem = () => {
-    return(
+    return (
       <div className="skeletonItem">
         <div className="posterBlock skeleton">
           <div className="textBlock">
@@ -43,8 +45,8 @@ const Carousel = ({ data, loading, endpoint }) => {
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="carousel">
@@ -57,34 +59,34 @@ const Carousel = ({ data, loading, endpoint }) => {
           className="carouselRightNav arrow"
           onClick={() => navigation("right")}
         />
-        { !loading ? (
-          <div 
-            className="carouselItems" 
-            ref={carouselContainer}>
+        {!loading ? (
+          <div className="carouselItems" ref={carouselContainer}>
             {data?.map((item) => {
-
-              const posterUrl = item.poster_path ? url.poster + item.poster_path : PosterFallback;
+              const posterUrl = item.poster_path
+                ? url.poster + item.poster_path
+                : PosterFallback;
 
               return (
-                <div 
+                <div
                   key={item.id}
-                  className="carouselItem" onClick={() => navigate(`/${item.media_type || endpoint}/${item.id}`)}>
-                    <div className="posterBlock">
-                      <Img src={posterUrl} />
-                      <CircleRating rating={item.vote_average.toFixed(1)}
-                      />
-                      <Genres data={item.genre_ids.slice(0,2)} />
-                    </div>
-                    <div className="textBlock">
-                      <span className="title">
-                        {item.title || item.name}
-                      </span>
-                      <span className="date">
-                        {dayjs(item.release_Date).format("MMM D, YYYY")}
-                      </span>
-                    </div>
+                  className="carouselItem"
+                  onClick={() =>
+                    navigate(`/${item.media_type || endpoint}/${item.id}`)
+                  }
+                >
+                  <div className="posterBlock">
+                    <Img src={posterUrl} />
+                    <CircleRating rating={item.vote_average.toFixed(1)} />
+                    <Genres data={item.genre_ids.slice(0, 2)} />
                   </div>
-              )
+                  <div className="textBlock">
+                    <span className="title">{item.title || item.name}</span>
+                    <span className="date">
+                      {dayjs(item.release_date).format("MMM D, YYYY")}
+                    </span>
+                  </div>
+                </div>
+              );
             })}
           </div>
         ) : (
@@ -95,7 +97,7 @@ const Carousel = ({ data, loading, endpoint }) => {
             {skItem()}
             {skItem()}
           </div>
-        ) }
+        )}
       </ContentWrapper>
     </div>
   );
