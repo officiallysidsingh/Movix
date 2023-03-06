@@ -5,14 +5,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //Importing pages
 import Home from "./pages/home/Home";
 const Details = lazy(() => import("./pages/details/Details"));
-import SearchResult from "./pages/searchResult/SearchResult";
-import Explore from "./pages/explore/Explore";
-import PageNotFound from "./pages/404/PageNotFound";
+const SearchResult = lazy(() => import("./pages/searchResult/SearchResult"));
+const Explore = lazy(() => import("./pages/explore/Explore"));
+const PageNotFound = lazy(() => import("./pages/404/PageNotFound"));
 
 //Importing components
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import DetailsSkeleton from "./components/detailsSkeleton/DetailsSkeleton";
+import Spinner from "./components/spinner/Spinner";
 
 const AppRouter = () => {
   return (
@@ -23,14 +23,35 @@ const AppRouter = () => {
         <Route
           path="/:mediaType/:id"
           element={
-            <Suspense fallback={<DetailsSkeleton />}>
+            <Suspense fallback={<Spinner />}>
               <Details />
             </Suspense>
           }
         />
-        <Route path="/search/:query" element={<SearchResult />} />
-        <Route path="/explore/:mediaType" element={<Explore />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route
+          path="/search/:query"
+          element={
+            <Suspense fallback={<Spinner />}>
+              <SearchResult />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/explore/:mediaType"
+          element={
+            <Suspense fallback={<Spinner />}>
+              <Explore />
+            </Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<Spinner />}>
+              <PageNotFound />
+            </Suspense>
+          }
+        />
       </Routes>
       <Footer />
     </Router>
